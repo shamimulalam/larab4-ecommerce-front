@@ -207,7 +207,7 @@
                                                         <div class="col-sm-12 list-product">
                                                             <div class="product-thumb">
                                                                 <div class="image pull-left">
-                                                                    <a href="#"><img src="img/demo/shop/product/35.jpg" width="80" alt="Filet Mign" title="Filet Mign" class="img-responsive"></a>
+                                                                    <a href="#"><img src="#" custag="img/demo/shop/product/35.jpg" width="80" alt="Filet Mign" title="Filet Mign" class="img-responsive"></a>
                                                                 </div>
                                                                 <div class="caption">
                                                                     <h4><a href="#">Filet Mign</a></h4>
@@ -225,7 +225,7 @@
                                                         <div class="col-sm-12 list-product">
                                                             <div class="product-thumb">
                                                                 <div class="image pull-left">
-                                                                    <a href="#"><img src="img/demo/shop/product/W1.jpg" width="80" alt="Dail Lulpa" title="Dail Lulpa" class="img-responsive"></a>
+                                                                    <a href="#"><img src="#" custag="img/demo/shop/product/W1.jpg" width="80" alt="Dail Lulpa" title="Dail Lulpa" class="img-responsive"></a>
                                                                 </div>
                                                                 <div class="caption">
                                                                     <h4><a href="#">Dail Lulpa</a></h4>
@@ -243,7 +243,7 @@
                                                         <div class="col-sm-12 list-product">
                                                             <div class="product-thumb">
                                                                 <div class="image pull-left">
-                                                                    <a href="#"><img src="img/demo/shop/product/141.jpg" width="80" alt="Canon EOS 5D" title="Canon EOS 5D" class="img-responsive"></a>
+                                                                    <a href="#"><img src="#" custag="img/demo/shop/product/141.jpg" width="80" alt="Canon EOS 5D" title="Canon EOS 5D" class="img-responsive"></a>
                                                                 </div>
                                                                 <div class="caption">
                                                                     <h4><a href="#">Canon EOS 5D</a></h4>
