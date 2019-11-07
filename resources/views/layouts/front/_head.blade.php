@@ -1,7 +1,7 @@
 
 <!-- Basic page needs
 ============================================ -->
-<title>Destino - Advanced & High Customizable eCommerce HTML5/CSS3 Theme</title>
+<title>@yield('title')</title>
 <meta charset="utf-8">
 <meta name="keywords" content="boostrap, responsive, html5, css3, jquery, theme, multicolor, parallax, retina, business" />
 <meta name="author" content="Magentech">

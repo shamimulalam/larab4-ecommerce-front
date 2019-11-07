@@ -104,7 +104,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <p class="text-right"> <a class="btn view-cart" href="cart.html"><i class="fa fa-shopping-cart"></i>View Cart</a>&nbsp;&nbsp;&nbsp; <a class="btn btn-mega checkout-cart" href="checkout.html"><i class="fa fa-share"></i>Checkout</a> </p>
+                                <p class="text-right"> <a class="btn view-cart" href="{{ route('checkout') }}"><i class="fa fa-shopping-cart"></i>Checkout</a></p>
                             </div>
                         </li>
                     </ul>

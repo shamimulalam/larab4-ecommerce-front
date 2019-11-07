@@ -1,4 +1,5 @@
 @extends('layouts.front.master')
+@section('title','Home')
 @section('custom-js')
     <script src="{{ asset('assets/front/js/cart.js') }}"></script>
 @endsection

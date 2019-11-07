@@ -1,6 +1,7 @@
 $(function () {
-   // localStorage.clear();
+    // localStorage.clear();
     cartDetails();
+    checkoutcartDetails();
     $('.addToCart').click(function () {
         let productId = $(this).attr('cus-product-id');
         let productName = $(this).attr('cus-product-name');
@@ -33,9 +34,11 @@ $(function () {
         cartDetails();
     });
 
-    $('.removeItem').click(function () {
+    $(document).on('click','.removeItem',function () {
         let productId = $(this).attr('cus-product-id');
         let cartNo = $(this).attr('cart_item_no');
+        console.log(productId);
+        console.log(cartNo);
         let cart = JSON.parse(localStorage.getItem('cart'));
         if(productId == cart[cartNo].productId){
             cart.splice(cartNo, 1);
@@ -43,20 +46,47 @@ $(function () {
         localStorage.setItem("cart",JSON.stringify(cart));
         cartDetails();
     });
-});
-function updateCart(product,index) {
-    let cart = JSON.parse(localStorage.getItem('cart'));
-    cart[index].productQuantity +=1;
-    localStorage.setItem("cart",JSON.stringify(cart));
-}
+    $('.checkoutBtn').click(function () {
+        if(checkCartItems())
+        {
+            let cartData = JSON.parse(localStorage.getItem('cart'));
+            let url = $(this).attr('cus-url');
+            $.ajax({
+                url: url,
+                data:{data:cartData},
+                type:'get',
+                success: function (response) {
+                    let res = JSON.parse(response);
+                    if(res.response)
+                    {
+                        localStorage.clear();
+                        cartDetails();
+                        checkoutcartDetails();
+                    }else{
+                        alert('Something went wrong, please try again');
+                    }
+                },
+                failed: function () {
+                        alert('Something went wrong, please try again');
 
-function addToCart(cart,product){
-    cart.push(product);
-    localStorage.setItem("cart",JSON.stringify(cart));
-}
+                }
+            });
+        }
 
-function checkCart(product){
-    let res =-1;
+    });
+    function updateCart(product,index) {
+        let cart = JSON.parse(localStorage.getItem('cart'));
+        cart[index].productQuantity +=1;
+        localStorage.setItem("cart",JSON.stringify(cart));
+    }
+
+    function addToCart(cart,product){
+        cart.push(product);
+        localStorage.setItem("cart",JSON.stringify(cart));
+    }
+
+    function checkCart(product){
+        let res =-1;
         if(localStorage.getItem('cart') === null)
         {
             return -1;
@@ -76,44 +106,93 @@ function checkCart(product){
                 }
             }
         }
-    return res;
-}
+        return res;
+    }
 
-function cartDetails() {
+    function cartDetails() {
 
-    if(localStorage.getItem('cart') === null)
-    {
+        let cartHtml = '';
+        let totalPrice = 0;
+        if(localStorage.getItem('cart') === null)
+        {
 
-    }else {
+            $('.number-shopping-cart').html(0);
+        }else {
 
-        let cartData = JSON.parse(localStorage.getItem('cart'));
-        $('.number-shopping-cart').html(cartData.length);
+            let cartData = JSON.parse(localStorage.getItem('cart'));
+            $('.number-shopping-cart').html(cartData.length);
+
+
+
+            cartData.forEach(function (data, index) {
+                cartHtml += '<tr>\n' +
+                    '                                    <td class="text-center" style="width:70px">\n' +
+                    '                                        <a href="#">\n' +
+                    '                                            <img src="' + data.productImage + '" style="width:70px" alt="Filet Mign" title="Filet Mign" class="preview">\n' +
+                    '                                        </a>\n' +
+                    '                                    </td>\n' +
+                    '                                    <td class="text-left"> <a class="cart_product_name" href="product.html">' + data.productName + '</a> </td>\n' +
+                    '                                    <td class="text-center"> x' + data.productQuantity + ' </td>\n' +
+                    '                                    <td class="text-center"> $' + data.productQuantity * data.productPrice + ' </td>\n' +
+                    '                                    <td class="text-right">\n' +
+                    '                                        <a href="product.html" class="fa fa-edit"></a>\n' +
+                    '                                    </td>\n' +
+                    '                                    <td class="text-right">\n' +
+                    '                                        <a  class="fa fa-times fa-delete removeItem" cus-product-id="'+data.productId+'" cart_item_no="'+index+'"></a>\n' +
+                    '                                    </td>\n' +
+                    '                                </tr>';
+                totalPrice += (data.productPrice * data.productQuantity);
+            });
+
+        }
+        $('.cart-table').html(cartHtml);
+        $('.cart-total').html('$'+totalPrice);
+    }
+    function checkoutcartDetails() {
 
         let totalPrice = 0;
 
         let cartHtml = '';
+        if(localStorage.getItem('cart') === null)
+        {
 
-        cartData.forEach(function (data, index) {
-            cartHtml += '<tr>\n' +
-                '                                    <td class="text-center" style="width:70px">\n' +
-                '                                        <a href="#">\n' +
-                '                                            <img src="' + data.productImage + '" style="width:70px" alt="Filet Mign" title="Filet Mign" class="preview">\n' +
-                '                                        </a>\n' +
-                '                                    </td>\n' +
-                '                                    <td class="text-left"> <a class="cart_product_name" href="product.html">' + data.productName + '</a> </td>\n' +
-                '                                    <td class="text-center"> x' + data.productQuantity + ' </td>\n' +
-                '                                    <td class="text-center"> $' + data.productQuantity * data.productPrice + ' </td>\n' +
-                '                                    <td class="text-right">\n' +
-                '                                        <a href="product.html" class="fa fa-edit"></a>\n' +
-                '                                    </td>\n' +
-                '                                    <td class="text-right">\n' +
-                '                                        <a  class="fa fa-times fa-delete removeItem" cus-product-id="'+data.productId+'" cart_item_no="'+index+'"></a>\n' +
-                '                                    </td>\n' +
-                '                                </tr>';
-            totalPrice += (data.productPrice * data.productQuantity);
-        });
+        }else {
 
-        $('.cart-table').html(cartHtml);
+            let cartData = JSON.parse(localStorage.getItem('cart'));
+            $('.number-shopping-cart').html(cartData.length);
+
+
+            cartData.forEach(function (data, index) {
+                cartHtml += '<tr>\n' +
+                    '\t\t\t\t\t\t\t\t\t<td class="text-center"><a href="#"><img width="70px" src="'+data.productImage+'" alt="Aspire Ultrabook Laptop" title="Aspire Ultrabook Laptop" class="img-thumbnail" /></a></td>\n' +
+                    '\t\t\t\t\t\t\t\t\t<td class="text-left"><a href="#">'+data.productName+'</a><br />\n' +
+                    '\t\t\t\t\t\t\t\t\t</td>\n' +
+                    '\t\t\t\t\t\t\t\t\t<td class="text-left" width="200px"><div class="input-group btn-block quantity">\n' +
+                    '\t\t\t\t\t\t\t\t\t\t<input type="text" name="quantity" value="'+data.productQuantity+'" size="1" class="form-control" />\n' +
+                    '\t\t\t\t\t\t\t\t\t\t<span class="input-group-btn">\n' +
+                    '\t\t\t\t\t\t\t\t\t\t\t<button type="submit" data-toggle="tooltip" title="Update" class="btn btn-primary"><i class="fa fa-clone"></i></button>\n' +
+                    '\t\t\t\t\t\t\t\t\t\t\t<button type="button" data-toggle="tooltip" title="Remove" class="btn btn-danger" onClick=""><i class="fa fa-times-circle"></i></button>\n' +
+                    '\t\t\t\t\t\t\t\t\t\t</span></div></td>\n' +
+                    '\t\t\t\t\t\t\t\t\t\t<td class="text-right">'+data.productPrice+'</td>\n' +
+                    '\t\t\t\t\t\t\t\t\t\t<td class="text-right">'+data.productPrice * data.productQuantity+'</td>\n' +
+                    '\t\t\t\t\t\t\t\t\t</tr>';
+                totalPrice += (data.productPrice * data.productQuantity);
+            });
+
+        }
+        $('.cartView').html(cartHtml);
         $('.cart-total').html('$'+totalPrice);
     }
-}
+
+
+    function checkCartItems()
+    {
+        if(localStorage.getItem('cart') === null)
+        {
+            return false;
+        }else {
+            return true;
+
+        }
+    }
+});
