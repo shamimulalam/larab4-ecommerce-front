@@ -1,4 +1,5 @@
 $(function () {
+   // localStorage.clear();
     cartDetails();
     $('.addToCart').click(function () {
         let productId = $(this).attr('cus-product-id');
@@ -21,12 +22,65 @@ $(function () {
         }else{
             cart = JSON.parse(localStorage.getItem('cart'));
         }
-        cart.push(product);
+
+        let index=checkCart(product);
+        if(index == -1){
+            addToCart(cart,product);
+        }else{
+            updateCart(product,index);
+        }
+
+        cartDetails();
+    });
+
+    $('.removeItem').click(function () {
+        let productId = $(this).attr('cus-product-id');
+        let cartNo = $(this).attr('cart_item_no');
+        let cart = JSON.parse(localStorage.getItem('cart'));
+        if(productId == cart[cartNo].productId){
+            cart.splice(cartNo, 1);
+        }
         localStorage.setItem("cart",JSON.stringify(cart));
         cartDetails();
     });
 });
+function updateCart(product,index) {
+    let cart = JSON.parse(localStorage.getItem('cart'));
+    cart[index].productQuantity +=1;
+    localStorage.setItem("cart",JSON.stringify(cart));
+}
+
+function addToCart(cart,product){
+    cart.push(product);
+    localStorage.setItem("cart",JSON.stringify(cart));
+}
+
+function checkCart(product){
+    let res =-1;
+        if(localStorage.getItem('cart') === null)
+        {
+            return -1;
+        }else {
+            let cartData = JSON.parse(localStorage.getItem('cart'));
+            // cartData.forEach(function (data, index) {
+            //     if(data.productId == product.productId){
+            //         res = index;
+            //        return res;
+            //     }
+            // });
+            let i;
+            for (i=0; i<cartData.length;i++){
+                if(cartData[i].productId == product.productId){
+                    res = i;
+                    break;
+                }
+            }
+        }
+    return res;
+}
+
 function cartDetails() {
+
     if(localStorage.getItem('cart') === null)
     {
 
@@ -39,7 +93,7 @@ function cartDetails() {
 
         let cartHtml = '';
 
-        cartData.forEach(function (data) {
+        cartData.forEach(function (data, index) {
             cartHtml += '<tr>\n' +
                 '                                    <td class="text-center" style="width:70px">\n' +
                 '                                        <a href="#">\n' +
@@ -53,7 +107,7 @@ function cartDetails() {
                 '                                        <a href="product.html" class="fa fa-edit"></a>\n' +
                 '                                    </td>\n' +
                 '                                    <td class="text-right">\n' +
-                '                                        <a onclick="cart.remove(\'2\');" class="fa fa-times fa-delete"></a>\n' +
+                '                                        <a  class="fa fa-times fa-delete removeItem" cus-product-id="'+data.productId+'" cart_item_no="'+index+'"></a>\n' +
                 '                                    </td>\n' +
                 '                                </tr>';
             totalPrice += (data.productPrice * data.productQuantity);
