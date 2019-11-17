@@ -37,6 +37,15 @@ class HomeController extends Controller
 
     public function product_details($id)
     {
-        return view('front.product_details');
+        $product = Product::findOrFail($id);
+        $data['product_details'] = $product;
+        $data['related_products'] = Product::where('category_id',$product->category_id)->orderBy('id','desc')->limit(6)->get();
+        $data['product_images'] = ProductImage::where('product_id',$id)->get();
+        $data['lest_products'] = Product::with(['product_images' => function($query){
+            return $query->get();
+        }])->active()->orderBy('id','desc')->limit(4)->get();
+
+//        dd($data);
+        return view('front.product_details',$data);
     }
 }
