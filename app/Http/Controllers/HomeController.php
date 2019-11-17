@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Product;
+use App\ProductImage;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,7 +24,19 @@ class HomeController extends Controller
         }])->active()->first();
         $data['new_arrivals'] = Product::with(['product_images','category'])->orderBy('id','desc')->limit(6)->get();
         $data['featured_products'] = Product::with(['product_images','category'])->where('is_featured',1)->orderBy('id','desc')->limit(6)->get();
-//        dd($data['new_arrivals']);
+//        dd($data);
         return view('front.home',$data);
+    }
+
+    public function quick_view($id)
+    {
+        $data['quick_view'] = Product::findOrFail($id);
+        $data['product_images'] = ProductImage::where('product_id',$id)->get();
+        return view('front.quick_view',$data);
+    }
+
+    public function product_details($id)
+    {
+        return view('front.product_details');
     }
 }

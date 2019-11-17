@@ -8,6 +8,7 @@ class Product extends Model
 {
     const ACTIVE_STATUS = 'active';
     const INACTIVE_STATUS = 'inactive';
+
     public function category()
     {
         return $this->belongsTo(Category::class);

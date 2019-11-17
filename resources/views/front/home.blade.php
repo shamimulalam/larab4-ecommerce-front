@@ -1,5 +1,7 @@
 @extends('layouts.front.master')
+
 @section('title','Home')
+
 @section('custom-js')
     <script src="{{ asset('assets/front/js/cart.js') }}"></script>
 @endsection
@@ -793,14 +795,14 @@
                                             <ul>
                                                 <li class="icon-heart"><a class="wishlist"   data-toggle="tooltip" title="" onclick="wishlist.add('42');" data-original-title="Add to Wish List"><i class="fa fa-heart"></i></a></li>
                                                 <li class="icon-exchange"><a class="compare"   data-toggle="tooltip" title="" onclick="compare.add('42');" data-original-title="Compare this Product"><i class="fa fa-exchange"></i></a></li>
-                                                <li class="icon-search"><a class="quickview iframe-link " data-fancybox-type="iframe" href="quickview.html">  <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                                                <li class="icon-search"><a class="quickview iframe-link " data-fancybox-type="iframe" href="{{ route('quick.view',$product->id) }}">  <i class="fa fa-search" aria-hidden="true"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="right-block">
                                     <div class="caption">
-                                        <h4><a href="product.html">{{ $product->name }}</a></h4>
+                                        <h4><a href="{{ route('product.details',$product->id) }}">{{ $product->name }}</a></h4>
                                         <div class="ratings">
                                             <div class="rating-box">
                                                 <span class=""><i class="fa fa-star "></i></span>
@@ -812,7 +814,7 @@
                                         </div>
 
                                         <div class="price">
-                                            <span class="price-new">{{ $product->unit_price }}</span>
+                                            <span class="price-new">${{ $product->unit_price }}</span>
                                         </div>
                                         <div class="description item-desc hidden">
                                             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est . </p>
