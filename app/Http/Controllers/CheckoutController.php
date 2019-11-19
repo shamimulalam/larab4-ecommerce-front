@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\Order;
 use App\OrderDetail;
 use App\Product;
@@ -16,12 +17,19 @@ class CheckoutController extends Controller
     }
     public function checkout(Request $request)
     {
-        $cart = $request->data;
-
+        $cart = $request->data['cart'];
+        $client = $request->data['client'];
         DB::beginTransaction();
         try {
+            $client = Client::create([
+                'name' => $client['name'],
+                'email' => $client['email'],
+                'phone' => $client['phone'],
+                'address' => $client['address'],
+            ]);
             $order = Order::create([
                 'invoice_id' => 'INV-' . time(),
+                'client_id' => $client->id,
                 'total_amount' => 0,
                 'payment_type' => Order::PT_OFFLINE,
                 'payment_status' => Order::PS_UNPAID,

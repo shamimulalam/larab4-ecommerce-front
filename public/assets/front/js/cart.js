@@ -50,30 +50,52 @@ $(function () {
         if(checkCartItems())
         {
             let cartData = JSON.parse(localStorage.getItem('cart'));
-            let url = $(this).attr('cus-url');
-            $.ajax({
-                url: url,
-                data:{data:cartData},
-                type:'get',
-                success: function (response) {
-                    let res = JSON.parse(response);
-                    if(res.response)
-                    {
-                        localStorage.clear();
-                        cartDetails();
-                        checkoutcartDetails();
-                    }else{
-                        alert('Something went wrong, please try again');
-                    }
-                },
-                failed: function () {
-                        alert('Something went wrong, please try again');
+            let client = {
+                name : $('#input-name').val(),
+                email : $('#input-email').val(),
+                phone : $('#input-phone').val(),
+                address : $('#input-address').val(),
+            };
+            if(client.name != '' && client.email != '' && client.phone != '' && client.address != '') {
+                let url = $(this).attr('cus-url');
+                $.ajax({
+                    url: url,
+                    data:{data:
+                            {
+                                client:client,
+                                cart:cartData,
+                            }
+                        },
+                    type:'get',
+                    success: function (response) {
+                        let res = JSON.parse(response);
+                        if(res.response)
+                        {
+                            localStorage.clear();
+                            cartDetails();
+                            checkoutcartDetails();
+                            refreshClientForm();
+                        }else{
+                            alert('Something went wrong, please try again');
+                        }
+                    },
+                    failed: function () {
+                            alert('Something went wrong, please try again');
 
-                }
-            });
+                    }
+                });
+            }else{
+                alert('All fields are required');
+            }
         }
 
     });
+    function refreshClientForm() {
+        $('#input-name').val('');
+        $('#input-email').val('');
+        $('#input-phone').val('');
+        $('#input-address').val('');
+    }
     function updateCart(product,index) {
         let cart = JSON.parse(localStorage.getItem('cart'));
         cart[index].productQuantity +=1;

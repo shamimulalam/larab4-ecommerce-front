@@ -24,7 +24,41 @@
                     </tbody>
                 </table>
             </div>
+            <h3 class="subtitle no-margin">Registration form</h3>
+            <p>Register yourself</p>
 
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse-coupon" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" aria-expanded="true">Registration
+
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-coupon" class="panel-collapse collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="input-name">Name</label>
+                                <input type="text" name="name" placeholder="Enter your name here" id="input-name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="input-email">Email</label>
+                                <input type="email" name="email" placeholder="Enter your email here" id="input-email" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="input-phone">Phone</label>
+                                <input type="text" name="phone" placeholder="Enter your phone here" id="input-phone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="input-address">Address</label>
+                                <textarea class="form-control" name="address" id="input-address" cols="30" rows="5" placeholder="Enter your address here"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-4 col-sm-offset-8">
                     <table class="table table-bordered">
