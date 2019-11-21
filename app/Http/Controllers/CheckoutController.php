@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Mail\OrderPlacement;
 use App\Order;
 use App\OrderDetail;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -56,6 +58,9 @@ class CheckoutController extends Controller
             $order->save();
 
             DB::commit();
+
+            Mail::to($client->email)->send(new OrderPlacement($order->id));
+
             return json_encode(['response'=>true]);
         }catch (\Exception $exception)
         {

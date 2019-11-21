@@ -26,4 +26,12 @@ class Order extends Model
     const STATUS_PROCESSING = 'processing';
     const STATUS_DELIVERED = 'delivered';
     const STATUS_DECLINED = 'declined';
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
 }

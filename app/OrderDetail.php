@@ -16,4 +16,8 @@ class OrderDetail extends Model
         'quantity',
         'subtotal',
     ];
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }
