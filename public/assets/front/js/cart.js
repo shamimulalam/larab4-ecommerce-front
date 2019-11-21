@@ -69,12 +69,14 @@ $(function () {
                     type:'get',
                     success: function (response) {
                         let res = JSON.parse(response);
-                        if(res.response)
+                        if(res.order_id)
                         {
                             localStorage.clear();
                             cartDetails();
                             checkoutcartDetails();
                             refreshClientForm();
+                            let redirectUrl = $('url').attr('val');
+                            window.location.replace(redirectUrl+'/'+res.order_id);
                         }else{
                             alert('Something went wrong, please try again');
                         }

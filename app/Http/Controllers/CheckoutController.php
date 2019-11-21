@@ -61,7 +61,7 @@ class CheckoutController extends Controller
 
             Mail::to($client->email)->send(new OrderPlacement($order->id));
 
-            return json_encode(['response'=>true]);
+            return json_encode(['order_id'=>$order->id]);
         }catch (\Exception $exception)
         {
             DB::rollBack();
