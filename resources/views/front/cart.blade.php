@@ -83,5 +83,5 @@
         <!--Middle Part End -->
 
     </div>
-    <url url="{{ route('payment.index') }}"></url>
+    <url val="{{ route('payment.index') }}"></url>
 @endsection

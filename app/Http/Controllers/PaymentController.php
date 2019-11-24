@@ -4,16 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Library\SslCommerz\SslCommerzNotification;
 use App\Order;
+use App\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
     public function index($order_id)
     {
         $data['order']= Order::findOrFail($order_id);
-        $response =  json_decode($this->paymentInit($order_id));
-        $data['url'] = $response->data;
-        return view('front.payment',$data);
+        if($data['order']->payment_status == 'unpaid') {
+            $response = json_decode($this->paymentInit($order_id));
+            $data['url'] = $response->data;
+            return view('front.payment', $data);
+        }
+        return redirect()->route('payment.confirmation');
     }
     public function paymentInit($order_id)
     {
@@ -67,6 +73,34 @@ class PaymentController extends Controller
     }
     public function success(Request $request)
     {
-        dd($request->all());
+        DB::beginTransaction();
+        try{
+            $order = Order::findOrFail($request->value_a);
+            $order->payment_status = Order::PS_PAID;
+            $order->payment_type = Order::PT_ONLINE;
+            $order->status = Order::STATUS_PROCESSING;
+            $order->save();
+
+            $transaction = new Transaction();
+            $transaction->order_id = $order->id;
+            $transaction->amount = $request->amount;
+            $transaction->card_type = $request->card_type;
+            $transaction->transaction_date = $request->tran_date;
+            $transaction->status = Transaction::STATUS_SUCCESS;
+            $transaction->transaction_data = json_encode($request->all());
+            $transaction->save();
+
+            DB::commit();
+            return redirect()->route('payment.confirmation');
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::info(json_encode($request->all()));
+            Log::error($exception->getMessage());
+            return redirect()->route('payment.index',$request->value_a);
+        }
+    }
+    public function payment_confirmation()
+    {
+        return view('front.payment_confirmation');
     }
 }
